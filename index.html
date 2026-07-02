@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كابتن محمود الغباشي | NASM Certified Personal Trainer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d26a;
+            --primary-dark: #00b85c;
+            --dark: #0a0a0a;
+            --dark-light: #141414;
+            --dark-card: #1a1a1a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --text-dim: #666666;
+            --border: #2a2a2a;
+            --gradient: linear-gradient(135deg, #00d26a 0%, #00b85c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .lang-toggle {
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 100px 5% 60px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/caab33adc48b05236241faf37fe3bf7fb694db91.jpg') center/cover no-repeat;
+            filter: brightness(0.3);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.9) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 210, 106, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero h1 .highlight {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient);
+            color: var(--dark);
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 210, 106, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 210, 106, 0.4);
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25d366;
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--dark-light);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-img {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .about-img img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-img::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--primary);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        .about-content h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .cert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .cert-badge i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .cert-badge span {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 210, 106, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Transformations Section */
+        .transformations {
+            background: var(--dark-light);
+        }
+
+        .transform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .transform-card {
+            background: var(--dark-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .transform-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .transform-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .transform-info h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .transform-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .transform-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+            display: block;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 20px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+        }
+
+        .gallery-overlay h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        /* Assessment Section */
+        .assessment {
+            background: var(--dark-light);
+        }
+
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 50px 40px;
+        }
+
+        .assessment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .form-group label span {
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid var(--border);
+            padding: 60px 5% 30px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--text);
+        }
+
+        .footer-contact {
+            margin: 30px 0;
+        }
+
+        .footer-contact a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25d366;
+            color: #fff;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .footer-contact a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+
+        .footer-note {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 100%;
+                background: var(--dark);
+                flex-direction: column;
+                padding: 20px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-img {
+                order: -1;
+            }
+
+            .about-img img {
+                height: 300px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-stats {
+                gap: 25px;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .assessment-container {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+            background: #25d366;
+            color: #fff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">كابتن <span>محمود الغباشي</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+            <li><a href="#about" data-ar="عني" data-en="About">عني</a></li>
+            <li><a href="#services" data-ar="خدماتي" data-en="Services">خدماتي</a></li>
+            <li><a href="#transformations" data-ar="تحولات" data-en="Transformations">تحولات</a></li>
+            <li><a href="#gallery" data-ar="معرض" data-en="Gallery">معرض</a></li>
+            <li><a href="#assessment" data-ar="استبيان NASM" data-en="NASM Assessment">استبيان NASM</a></li>
+        </ul>
+        <button class="lang-toggle" id="langToggle">EN</button>
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge" data-ar="مدرب شخصي معتمد من NASM" data-en="NASM Certified Personal Trainer">مدرب شخصي معتمد من NASM</div>
+            <h1 data-ar="كابتن <span class='highlight'>محمود الغباشي</span>" data-en="Coach <span class='highlight'>Mahmoud El-Ghabashi</span>">كابتن <span class="highlight">محمود الغباشي</span></h1>
+            <p class="hero-subtitle" data-ar="حوّل جسمك. غيّر حياتك." data-en="Transform Your Body. Change Your Life.">حوّل جسمك. غيّر حياتك.</p>
+            <p class="hero-desc" data-ar="برامج تدريب شخصي مخصصة ونظم غذائية علمية بناءً على معايير NASM العالمية لتحقيق أهدافك بأسرع وقت" data-en="Personalized training programs & scientific nutrition plans based on NASM global standards to achieve your goals in the fastest time">برامج تدريب شخصي مخصصة ونظم غذائية علمية بناءً على معايير NASM العالمية لتحقيق أهدافك بأسرع وقت</p>
+            <a href="#assessment" class="btn-primary" data-ar="ابدأ رحلتك الآن →" data-en="Start Your Journey Now →">ابدأ رحلتك الآن →</a>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label" data-ar="متدرب" data-en="Clients">متدرب</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label" data-ar="سنوات خبرة" data-en="Years Experience">سنوات خبرة</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label" data-ar="رضا العملاء" data-en="Client Satisfaction">رضا العملاء</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-header">
+            <div class="section-tag" data-ar="من أنا" data-en="Who I Am">من أنا</div>
+            <h2 class="section-title" data-ar="عن كابتن محمود" data-en="About Coach Mahmoud">عن كابتن محمود</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-content">
+                <h3 data-ar="شغفي هو تحويل الأجسام وتغيير الحياة" data-en="My Passion is Transforming Bodies & Changing Lives">شغفي هو تحويل الأجسام وتغيير الحياة</h3>
+                <p data-ar="أنا كابتن محمود الغباشي، مدرب شخصي معتمد من أكبر مؤسسة تدريب في العالم NASM. لديّ خبرة تمتد ل4 سنوات في مجال التدريب الشخصي والتغذية الرياضية." data-en="I am Coach Mahmoud El-Ghabashi, a certified personal trainer from NASM, the world's largest training organization. I have 4 years of experience in personal training and sports nutrition.">أنا كابتن محمود الغباشي، مدرب شخصي معتمد من أكبر مؤسسة تدريب في العالم NASM. لديّ خبرة تمتد ل4 سنوات في مجال التدريب الشخصي والتغذية الرياضية.</p>
+                <p data-ar="مؤمن بأن كل جسم مختلف، ولهذا أصمم برنامجاً مخصصاً لكل عميل بناءً على بياناته الشخصية وأهدافه. لا وجود لبرنامج واحد يناسب الجميع — بل برنامج واحد يناسبك أنت فقط." data-en="I believe every body is different, which is why I design a customized program for each client based on their personal data and goals. There is no one-size-fits-all — only one program that fits YOU.">مؤمن بأن كل جسم مختلف، ولهذا أصمم برنامجاً مخصصاً لكل عميل بناءً على بياناته الشخصية وأهدافه. لا وجود لبرنامج واحد يناسب الجميع — بل برنامج واحد يناسبك أنت فقط.</p>
+
+                <div class="cert-badge">
+                    <span>🏆</span>
+                    <span data-ar="شهادة NASM - CPT (مدرب شخصي معتمد)" data-en="NASM - CPT (Certified Personal Trainer)">شهادة NASM - CPT (مدرب شخصي معتمد)</span>
+                </div>
+                <div class="cert-badge">
+                    <span>🥗</span>
+                    <span data-ar="شهادة NASM - CNC (تغذية رياضية معتمدة)" data-en="NASM - CNC (Certified Nutrition Coach)">شهادة NASM - CNC (تغذية رياضية معتمدة)</span>
+                </div>
+                <div class="cert-badge">
+                    <span>💪</span>
+                    <span data-ar="شهادة NASM - CES (تصحيح التمارين الرياضية)" data-en="NASM - CES (Corrective Exercise Specialist)">شهادة NASM - CES (تصحيح التمارين الرياضية)</span>
+                </div>
+            </div>
+            <div class="about-img">
+                <img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/e0a1bd1b103900a2a2c87955ade758a3e733c97d.webp" alt="Personal Training">
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <div class="section-tag" data-ar="خدماتي" data-en="My Services">خدماتي</div>
+            <h2 class="section-title" data-ar="برامج مصممة خصيصاً لك" data-en="Programs Designed Just For You">برامج مصممة خصيصاً لك</h2>
+            <p class="section-desc" data-ar="كل برنامج يبدأ باستبيان NASM الشامل لتحديد احتياجاتك بدقة" data-en="Every program starts with a comprehensive NASM assessment to precisely determine your needs">كل برنامج يبدأ باستبيان NASM الشامل لتحديد احتياجاتك بدقة</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏋️</div>
+                <h3 data-ar="تدريب شخصي" data-en="Personal Training">تدريب شخصي</h3>
+                <p data-ar="جلسات تدريب مباشرة مع متابعة دقيقة لتقنيات التمرين وتصحيح الأداء" data-en="Live training sessions with close monitoring of exercise techniques and performance correction">جلسات تدريب مباشرة مع متابعة دقيقة لتقنيات التمرين وتصحيح الأداء</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3 data-ar="تدريب أونلاين" data-en="Online Training">تدريب أونلاين</h3>
+                <p data-ar="برنامج تدريبي كامل عبر التطبيق مع متابعة يومية وتعديلات مستمرة" data-en="Complete training program via app with daily follow-up and continuous adjustments">برنامج تدريبي كامل عبر التطبيق مع متابعة يومية وتعديلات مستمرة</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🥗</div>
+                <h3 data-ar="نظام غذائي مخصص" data-en="Custom Nutrition Plan">نظام غذائي مخصص</h3>
+                <p data-ar="خطة غذائية علمية بناءً على بيانات جسمك وأهدافك مع بدائل متنوعة" data-en="Scientific nutrition plan based on your body data and goals with varied alternatives">خطة غذائية علمية بناءً على بيانات جسمك وأهدافك مع بدائل متنوعة</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3 data-ar="متابعة وتقييم" data-en="Tracking & Evaluation">متابعة وتقييم</h3>
+                <p data-ar="تقييم أسبوعي للنتائج وتعديل البرنامج بناءً على تطورك الفعلي" data-en="Weekly evaluation of results and program adjustment based on your actual progress">تقييم أسبوعي للنتائج وتعديل البرنامج بناءً على تطورك الفعلي</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔄</div>
+                <h3 data-ar="تصحيح إصابات" data-en="Injury Correction">تصحيح إصابات</h3>
+                <p data-ar="برامج تصحيحية لإصابات المفاصل والعضلات باستخدام منهجية NASM" data-en="Corrective programs for joint and muscle injuries using NASM methodology">برامج تصحيحية لإصابات المفاصل والعضلات باستخدام منهجية NASM</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <h3 data-ar="تحضير بطولات" data-en="Competition Prep">تحضير بطولات</h3>
+                <p data-ar="تحضير متكامل للمنافسات الرياضية والبطولات بأعلى مستوى احترافي" data-en="Comprehensive preparation for sports competitions and championships at the highest professional level">تحضير متكامل للمنافسات الرياضية والبطولات بأعلى مستوى احترافي</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transformations Section -->
+    <section class="transformations" id="transformations">
+        <div class="section-header">
+            <div class="section-tag" data-ar="نتائج حقيقية" data-en="Real Results">نتائج حقيقية</div>
+            <h2 class="section-title" data-ar="تحولات مذهلة" data-en="Amazing Transformations">تحولات مذهلة</h2>
+            <p class="section-desc" data-ar="هذه بعض النتائج الحقيقية لمتدربين اتبعوا البرنامج بإلتزام" data-en="These are real results from clients who followed the program with commitment">هذه بعض النتائج الحقيقية لمتدربين اتبعوا البرنامج بإلتزام</p>
+        </div>
+        <div class="transform-grid">
+            <div class="transform-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/static.boredpanda.com/b27bf609ae05fbefb9a2cdec56aaf03aae5187c0.png" alt="Transformation 1">
+                <div class="transform-info">
+                    <div class="transform-tag" data-ar="تضخيم عضلي" data-en="Muscle Building">تضخيم عضلي</div>
+                    <h4 data-ar="+12 كجم عضلات صافية" data-en="+12kg Pure Muscle">+12 كجم عضلات صافية</h4>
+                    <p data-ar="4 أشهر فقط | برنامج تدريب + تغذية" data-en="4 Months Only | Training + Nutrition">4 أشهر فقط | برنامج تدريب + تغذية</p>
+                </div>
+            </div>
+            <div class="transform-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/i0.wp.com/923d24bd71a572e7bb4a7e0965af3ee18f6d9c0c.webp" alt="Transformation 2">
+                <div class="transform-info">
+                    <div class="transform-tag" data-ar="تنحيف وتنشيف" data-en="Fat Loss & Shredding">تنحيف وتنشيف</div>
+                    <h4 data-ar="-18 كجم دهون" data-en="-18kg Body Fat">-18 كجم دهون</h4>
+                    <p data-ar="6 أشهر | تحول كامل للجسم" data-en="6 Months | Complete Body Transformation">6 أشهر | تحول كامل للجسم</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="section-header">
+            <div class="section-tag" data-ar="معرض الصور" data-en="Photo Gallery">معرض الصور</div>
+            <h2 class="section-title" data-ar="لحظات من رحلة التحول" data-en="Moments from the Transformation Journey">لحظات من رحلة التحول</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://kimi-web-img.moonshot.cn/img/www.orangeshoe.com/825d7b02e201d22eeffd187811a38896afa55164.jpg" alt="Training Session">
+                <div class="gallery-overlay">
+                    <h4 data-ar="جلسة تدريب شخصي" data-en="Personal Training Session">جلسة تدريب شخصي</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://kimi-web-img.moonshot.cn/img/www.shape.com/31f30ee4469c7f261d3ed8463d109222e39f3e9e.jpg" alt="Healthy Meals">
+                <div class="gallery-overlay">
+                    <h4 data-ar="وجبات صحية مخصصة" data-en="Customized Healthy Meals">وجبات صحية مخصصة</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/1e0f0f63d7a90b27a0a799b9b931054508a09a53.png" alt="Nutrition Guide">
+                <div class="gallery-overlay">
+                    <h4 data-ar="دليل التغذية العلمية" data-en="Scientific Nutrition Guide">دليل التغذية العلمية</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://kimi-web-img.moonshot.cn/img/www.carterandgeorge.co.uk/d15118d577aeed5ab68ee385928a1a66f6584963" alt="Coaching">
+                <div class="gallery-overlay">
+                    <h4 data-ar="تصحيح الأداء" data-en="Performance Correction">تصحيح الأداء</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section class="assessment" id="assessment">
+        <div class="section-header">
+            <div class="section-tag" data-ar="استبيان NASM" data-en="NASM Assessment">استبيان NASM</div>
+            <h2 class="section-title" data-ar="ابدأ رحلتك الآن" data-en="Start Your Journey Now">ابدأ رحلتك الآن</h2>
+            <p class="section-desc" data-ar="املأ الاستبيان التالي بدقة وسأتواصل معك عبر واتساب لإعداد برنامجك المخصص" data-en="Fill out the following assessment accurately and I will contact you via WhatsApp to prepare your customized program">املأ الاستبيان التالي بدقة وسأتواصل معك عبر واتساب لإعداد برنامجك المخصص</p>
+        </div>
+        <div class="assessment-container">
+            <form class="assessment-form" id="assessmentForm" onsubmit="sendToWhatsApp(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-ar="الاسم الكامل <span>*</span>" data-en="Full Name <span>*</span>">الاسم الكامل <span>*</span></label>
+                        <input type="text" id="fullName" required placeholder="محمد أحمد">
+                    </div>
+                    <div class="form-group">
+                        <label data-ar="العمر <span>*</span>" data-en="Age <span>*</span>">العمر <span>*</span></label>
+                        <input type="number" id="age" required placeholder="25" min="15" max="80">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-ar="الوزن الحالي (كجم) <span>*</span>" data-en="Current Weight (kg) <span>*</span>">الوزن الحالي (كجم) <span>*</span></label>
+                        <input type="number" id="weight" required placeholder="80" min="30" max="200">
+                    </div>
+                    <div class="form-group">
+                        <label data-ar="الطول (سم) <span>*</span>" data-en="Height (cm) <span>*</span>">الطول (سم) <span>*</span></label>
+                        <input type="number" id="height" required placeholder="175" min="100" max="250">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="الهدف الرئيسي <span>*</span>" data-en="Primary Goal <span>*</span>">الهدف الرئيسي <span>*</span></label>
+                    <select id="goal" required>
+                        <option value="" data-ar="اختر هدفك" data-en="Select your goal">اختر هدفك</option>
+                        <option value="تنحيف وحرق دهون" data-ar="تنحيف وحرق دهون" data-en="Fat Loss & Shredding">تنحيف وحرق دهون</option>
+                        <option value="تضخيم عضلي" data-ar="تضخيم عضلي" data-en="Muscle Building">تضخيم عضلي</option>
+                        <option value="تنشيف وتفصيل" data-ar="تنشيف وتفصيل" data-en="Shredding & Definition">تنشيف وتفصيل</option>
+                        <option value="لياقة عامة" data-ar="لياقة عامة" data-en="General Fitness">لياقة عامة</option>
+                        <option value="تأهيل إصابة" data-ar="تأهيل إصابة" data-en="Injury Rehabilitation">تأهيل إصابة</option>
+                        <option value="تحضير بطولة" data-ar="تحضير بطولة" data-en="Competition Prep">تحضير بطولة</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="مستوى النشاط الحالي <span>*</span>" data-en="Current Activity Level <span>*</span>">مستوى النشاط الحالي <span>*</span></label>
+                    <select id="activity" required>
+                        <option value="" data-ar="اختر مستوى نشاطك" data-en="Select your activity level">اختر مستوى نشاطك</option>
+                        <option value="خامل (لا تمارس رياضة)" data-ar="خامل (لا تمارس رياضة)" data-en="Sedentary (No exercise)">خامل (لا تمارس رياضة)</option>
+                        <option value="خفيف (1-2 يام/أسبوع)" data-ar="خفيف (1-2 يام/أسبوع)" data-en="Light (1-2 days/week)">خفيف (1-2 يام/أسبوع)</option>
+                        <option value="متوسط (3-4 يام/أسبوع)" data-ar="متوسط (3-4 يام/أسبوع)" data-en="Moderate (3-4 days/week)">متوسط (3-4 يام/أسبوع)</option>
+                        <option value="نشط (5-6 يام/أسبوع)" data-ar="نشط (5-6 يام/أسبوع)" data-en="Active (5-6 days/week)">نشط (5-6 يام/أسبوع)</option>
+                        <option value="رياضي محترف (يومياً)" data-ar="رياضي محترف (يومياً)" data-en="Professional Athlete (Daily)">رياضي محترف (يومياً)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="هل لديك إصابات سابقة أو مشاكل صحية؟" data-en="Any previous injuries or health issues?">هل لديك إصابات سابقة أو مشاكل صحية؟</label>
+                    <textarea id="injuries" placeholder="اذكر أي إصابات في الركبة، الظهر، الكتف... أو أي أمراض مزمنة" data-ar-placeholder="اذكر أي إصابات في الركبة، الظهر، الكتف... أو أي أمراض مزمنة" data-en-placeholder="Mention any knee, back, shoulder injuries... or chronic diseases"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="تفضيلاتك الغذائية" data-en="Your Food Preferences">تفضيلاتك الغذائية</label>
+                    <select id="diet">
+                        <option value="" data-ar="اختر تفضيلك" data-en="Select preference">اختر تفضيلك</option>
+                        <option value="لا يوجد" data-ar="لا يوجد" data-en="None">لا يوجد</option>
+                        <option value="نباتي" data-ar="نباتي" data-en="Vegetarian">نباتي</option>
+                        <option value="كيتو" data-ar="كيتو" data-en="Keto">كيتو</option>
+                        <option value="كارنيفور" data-ar="كارنيفور" data-en="Carnivore">كارنيفور</option>
+                        <option value="بدون جلوتين" data-ar="بدون جلوتين" data-en="Gluten Free">بدون جلوتين</option>
+                        <option value="بدون لاكتوز" data-ar="بدون لاكتوز" data-en="Lactose Free">بدون لاكتوز</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="كم يوماً تستطيع التمرين أسبوعياً؟ <span>*</span>" data-en="How many days can you train per week? <span>*</span>">كم يوماً تستطيع التمرين أسبوعياً؟ <span>*</span></label>
+                    <select id="days" required>
+                        <option value="" data-ar="اختر عدد الأيام" data-en="Select number of days">اختر عدد الأيام</option>
+                        <option value="3 أيام" data-ar="3 أيام" data-en="3 Days">3 أيام</option>
+                        <option value="4 أيام" data-ar="4 أيام" data-en="4 Days">4 أيام</option>
+                        <option value="5 أيام" data-ar="5 أيام" data-en="5 Days">5 أيام</option>
+                        <option value="6 أيام" data-ar="6 أيام" data-en="6 Days">6 أيام</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="هل تفضل التدريب في الجيم أم المنزل؟ <span>*</span>" data-en="Do you prefer gym or home training? <span>*</span>">هل تفضل التدريب في الجيم أم المنزل؟ <span>*</span></label>
+                    <select id="location" required>
+                        <option value="" data-ar="اختر مكان التدريب" data-en="Select training location">اختر مكان التدريب</option>
+                        <option value="جيم" data-ar="جيم" data-en="Gym">جيم</option>
+                        <option value="منزل" data-ar="منزل" data-en="Home">منزل</option>
+                        <option value="كلاهما" data-ar="كلاهما" data-en="Both">كلاهما</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-ar="أي ملاحظات إضافية؟" data-en="Any additional notes?">أي ملاحظات إضافية؟</label>
+                    <textarea id="notes" placeholder="اكتب أي معلومات إضافية تساعدني في تصميم برنامجك" data-ar-placeholder="اكتب أي معلومات إضافية تساعدني في تصميم برنامجك" data-en-placeholder="Write any additional information to help me design your program"></textarea>
+                </div>
+
+                <button type="submit" class="btn-whatsapp" style="width: 100%; justify-content: center;">
+                    <span style="font-size: 1.5rem;">📱</span> <span data-ar="إرسال الاستبيان على واتساب" data-en="Send Assessment via WhatsApp">إرسال الاستبيان على واتساب</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">كابتن <span>محمود الغباشي</span></div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;" data-ar="مدرب شخصي معتمد من NASM | تدريب - تغذية - تحول" data-en="NASM Certified Personal Trainer | Training - Nutrition - Transformation">مدرب شخصي معتمد من NASM | تدريب - تغذية - تحول</p>
+        <div class="footer-contact">
+            <a href="https://wa.me/201119216652" target="_blank">
+                <span style="font-size: 1.5rem;">📱</span> <span data-ar="تواصل معي على واتساب" data-en="Contact me on WhatsApp">تواصل معي على واتساب</span>
+            </a>
+        </div>
+        <p style="color: var(--primary); font-weight: 700; font-size: 1.2rem; margin-top: 15px;">01119216652</p>
+        <p class="footer-note" data-ar="جميع الحقوق محفوظة © 2026 كابتن محمود الغباشي" data-en="All Rights Reserved © 2026 Coach Mahmoud El-Ghabashi">جميع الحقوق محفوظة © 2026 كابتن محمود الغباشي</p>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/201119216652" class="whatsapp-float" target="_blank" title="تواصل عبر واتساب">
+        <span style="font-size: 1.8rem;">💬</span>
+    </a>
+
+    <script>
+        // Language Toggle
+        let currentLang = 'ar';
+        const langToggle = document.getElementById('langToggle');
+
+        langToggle.addEventListener('click', function() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            langToggle.textContent = currentLang === 'ar' ? 'EN' : 'AR';
+
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = el.getAttribute('data-' + currentLang + '-placeholder') || el.getAttribute('data-ar-placeholder');
+                } else {
+                    el.innerHTML = el.getAttribute('data-' + currentLang);
+                }
+            });
+
+            document.querySelectorAll('select option').forEach(opt => {
+                if (opt.getAttribute('data-' + currentLang)) {
+                    opt.textContent = opt.getAttribute('data-' + currentLang);
+                }
+            });
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Send to WhatsApp - FIXED for iPhone + better emojis
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+            const goal = document.getElementById('goal').value;
+            const activity = document.getElementById('activity').value;
+            const injuries = document.getElementById('injuries').value || '❌ لا يوجد';
+            const diet = document.getElementById('diet').value || '❌ لا يوجد';
+            const days = document.getElementById('days').value;
+            const location = document.getElementById('location').value;
+            const notes = document.getElementById('notes').value || '❌ لا يوجد';
+
+            const bmi = (weight / ((height/100) * (height/100))).toFixed(1);
+
+            const message = `🎯 *استبيان جديد من موقع كابتن محمود الغباشي*
+
+👤 *الاسم:* ${fullName}
+📅 *العمر:* ${age} سنة
+⚖️ *الوزن:* ${weight} كجم
+📏 *الطول:* ${height} سم
+📊 *BMI:* ${bmi}
+
+━━━━━━━━━━━━━━━━━━━━
+🎯 *الهدف الرئيسي:* ${goal}
+🏃 *مستوى النشاط:* ${activity}
+🍽️ *التفضيلات الغذائية:* ${diet}
+
+━━━━━━━━━━━━━━━━━━━━
+💪 *خطة التدريب:*
+📅 *عدد الأيام:* ${days}
+🏠 *مكان التدريب:* ${location}
+
+━━━━━━━━━━━━━━━━━━━━
+⚠️ *الإصابات / المشاكل الصحية:*
+${injuries}
+
+📝 *ملاحظات إضافية:*
+${notes}
+
+━━━━━━━━━━━━━━━━━━━━
+🔥 *أنا جاهز لبدء رحلتي!* 💪`;
+
+            // iPhone-friendly WhatsApp URL
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            let whatsappUrl;
+
+            if (isIOS) {
+                // Use api.whatsapp.com for iPhone (more reliable)
+                whatsappUrl = 'https://api.whatsapp.com/send?phone=201119216652&text=' + encodeURIComponent(message);
+            } else {
+                // Use wa.me for Android and desktop
+                whatsappUrl = 'https://wa.me/201119216652?text=' + encodeURIComponent(message);
+            }
+
+            // Open in new tab
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .transform-card, .gallery-item, .about-content, .about-img').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
